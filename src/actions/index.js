@@ -6,14 +6,19 @@ const ROOTURL = `http://api.openweathermap.org/data/2.5/forecast?appid=${API_KEY
 
 export const FETCH_WEATHER = 'FETCH_WEATHER';
 
-export function fetchWeather(city) {
-    console.log( 'ROOT URL is : ',`${ROOTURL}`);
-    const url = `${ROOTURL}&q=${city},us`;
-    const request = axios.get(url);
 
-    console.log("requst  is : ", request);
+function fetchWeatherSuccess(data) {
     return {
-         type: FETCH_WEATHER,
-         payload: request
-    };
+        type: FETCH_WEATHER,
+        data,
+    }
+}
+
+export function fetchWeather(city) {
+    return (dispatch) => {
+        console.log( 'ROOT URL is : ',`${ROOTURL}`);
+        const url = `${ROOTURL}&q=${city},us`;
+        axios.get(url)
+            .then((result => dispatch(fetchWeatherSuccess(result.data))));
+    }
 }
